@@ -1,6 +1,6 @@
-# Bully Lua intellisense
+# Bully Lua Intellisense - VS Code
 
-This is the README for your extension "bully-lua". After writing up a brief description, we recommend including the following sections.
+Bully Lua variables &amp; functions intellisense for Visual Studio Code.
 
 ## Features
 
