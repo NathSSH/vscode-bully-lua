@@ -13,9 +13,9 @@ import {
 } from "../utils";
 import { TBullyFunction } from "../types/function";
 import { TVariable } from "../types/variable";
-import SNIPPETS from "../snippets";
+import SNIPPETS, { TSnippet } from "../snippets";
 
-const getVariableCompletionItem = (name: string): vscode.CompletionItem => {
+const createVariableCompletionItem = (name: string): vscode.CompletionItem => {
   const variableObj = getBullyVariableObj(name) as TVariable;
 
   const item = new vscode.CompletionItem(
@@ -33,7 +33,7 @@ const getVariableCompletionItem = (name: string): vscode.CompletionItem => {
   return item;
 };
 
-const getFunctionCompletionItem = (name: string): vscode.CompletionItem => {
+const createFunctionCompletionItem = (name: string): vscode.CompletionItem => {
   const functionObj = getBullyFunctionObj(name) as TBullyFunction;
 
   const item = new vscode.CompletionItem(
@@ -59,15 +59,39 @@ const getFunctionCompletionItem = (name: string): vscode.CompletionItem => {
   return item;
 };
 
+const createSnippetCompletionItem = ({
+  name,
+  prefix,
+  desc,
+  body,
+}: TSnippet): vscode.CompletionItem => {
+  const item = new vscode.CompletionItem(
+    prefix,
+    vscode.CompletionItemKind.Snippet
+  );
+
+  item.detail = name;
+
+  item.insertText = new vscode.SnippetString(
+    body.join("\n").replaceAll("  ", "\t")
+  );
+
+  const description = Array.isArray(desc) ? desc.join("\n") : desc;
+
+  item.documentation = new vscode.MarkdownString(description);
+
+  return item;
+};
+
 const completionProvider = vscode.languages.registerCompletionItemProvider(
   BULLY_SCRIPTING_LANGUAGE,
   {
-    provideCompletionItems: async (
+    provideCompletionItems: (
       document,
       position,
       token,
       context
-    ): Promise<vscode.CompletionItem[] | undefined> => {
+    ): vscode.CompletionItem[] | undefined => {
       const wordRange = document.getWordRangeAtPosition(position);
       const suggestions: vscode.CompletionItem[] = [];
 
@@ -88,23 +112,16 @@ const completionProvider = vscode.languages.registerCompletionItemProvider(
           });
         };
 
-        pushMatchingItems(BULLY_VARIABLES, getVariableCompletionItem);
-        pushMatchingItems(BULLY_FUNCTIONS, getFunctionCompletionItem);
+        pushMatchingItems(BULLY_VARIABLES, createVariableCompletionItem);
+        pushMatchingItems(BULLY_FUNCTIONS, createFunctionCompletionItem);
       }
 
       // Snippet
-      SNIPPETS.forEach((snippet, index) => {
-        const snippetItem = new vscode.CompletionItem(
-          snippet.prefix,
-          vscode.CompletionItemKind.Snippet
-        );
-        snippetItem.insertText = new vscode.SnippetString(
-          snippet.body.join("\n").replaceAll("  ", "\t")
-        );
-        snippetItem.documentation = new vscode.MarkdownString(snippet.desc);
-
+      SNIPPETS.sort((a, b) =>
+        a.name < b.name ? -1 : a.name > b.name ? 1 : 0
+      ).forEach((snippet, index) => {
         // Insert
-        suggestions.push(snippetItem);
+        suggestions.push(createSnippetCompletionItem(snippet));
       });
 
       // Default suggestion
@@ -166,7 +183,7 @@ const completionProvider = vscode.languages.registerCompletionItemProvider(
       }); */
 
       // Attempt 3
-      const editor = vscode.window.activeTextEditor;
+      /* const editor = vscode.window.activeTextEditor;
 
       if (editor) {
         const text = editor.document.getText();
@@ -178,7 +195,7 @@ const completionProvider = vscode.languages.registerCompletionItemProvider(
             new vscode.CompletionItem(word, vscode.CompletionItemKind.Text)
           );
         });
-      }
+      } */
 
       return suggestions;
     },

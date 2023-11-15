@@ -1,8 +1,8 @@
-import * as vscode from "vscode";
 //eslint-disable-next-line
 import GLOBAL_VARIABLES from "./DATA.json";
 import { BULLY_SCRIPTING_LANGUAGE } from "./constant";
-import { TBullyFunction, TBullyFunctionParam, TReturn } from "./types/function";
+import { TSnippet } from "./snippets";
+import { TBullyFunction, TBullyFunctionParam } from "./types/function";
 import { TVariable } from "./types/variable";
 
 //-------------------------------------------------------------------------------------------------
@@ -200,6 +200,17 @@ export const createVariableCode = (
     `_G.${name} = ${value}\n`
   );
 };
+
+//-------------------------------------------------------------------------------------------------
+
+/* export const createSnippetMarkdownString = (
+  name: TSnippet["name"],
+  code: TSnippet["body"]
+): string => {
+  const codeString = code.join("\n");
+
+  return ``;
+}; */
 
 //-------------------------------------------------------------------------------------------------
 

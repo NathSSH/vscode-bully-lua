@@ -7,7 +7,6 @@ import {
   createVariableCode,
   getBullyFunctionObj,
   getBullyVariableObj,
-  isBullyFunction,
   isBullyVariableOrFunction,
 } from "../utils";
 import { TBullyFunction } from "../types/function";
@@ -26,7 +25,6 @@ const hoverProvider = vscode.languages.registerHoverProvider(
 
       const writtenText = document.getText(wordRange);
 
-      // New
       const textContent = new vscode.MarkdownString();
 
       switch (isBullyVariableOrFunction(writtenText, "exact")) {
@@ -60,29 +58,6 @@ const hoverProvider = vscode.languages.registerHoverProvider(
       }
 
       return;
-
-      // Old
-      /* if (!isBullyFunction(writtenText)) {
-        return;
-      }
-      const functionInfo = getBullyFunctionObj(writtenText) as TBullyFunction;
-
-      const hoverText = new vscode.MarkdownString();
-
-      const formattedFunctionParams = createFormattedFunctionParams(
-        functionInfo.params
-      );
-      const functionCode = createFunctionCode(
-        functionInfo.name,
-        formattedFunctionParams,
-        functionInfo.returnValue
-      );
-
-      hoverText.appendMarkdown(
-        functionCode + createDescription(functionInfo.desc)
-      );
-
-      return new vscode.Hover(hoverText, wordRange); */
     },
   }
 );

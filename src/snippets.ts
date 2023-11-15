@@ -1,20 +1,46 @@
 export type TSnippet = {
   name: string;
   prefix: string;
+  desc: string | string[];
   body: string[];
-  desc: string;
 };
 
 export const SNIPPETS: TSnippet[] = [
   {
-    name: "function main",
+    name: "main function",
     prefix: "main",
-    body: ["function main()", "\t$0", "end"],
-    desc: "Declare a main function.\n\n```lua\nfunction main()\n\t\nend\n\n```",
+    desc: [
+      "Declare a main function template.",
+      "```lua",
+      "function main()",
+      "  while not SystemIsReady() do",
+      "    Wait(0)",
+      "  end",
+      "  ",
+      "  while true do",
+      "    Wait(0)",
+      "    ",
+      "  end",
+      "end",
+      "```",
+    ],
+    body: [
+      "function main()",
+      "  while not SystemIsReady() do",
+      "    Wait(0)",
+      "  end",
+      "  $1",
+      "  while true do",
+      "    Wait(0)",
+      "    $0",
+      "  end",
+      "end",
+    ],
   },
   {
     name: "STimeCycle",
     prefix: "stimecycle",
+    desc: "Generates some functions that exist in STimeCycle.lur.",
     body: [
       "function F_AttendedClass()",
       '  if IsMissionCompleated("3_08") and not IsMissionCompleated("3_08_PostDummy") then',
@@ -130,7 +156,34 @@ export const SNIPPETS: TSnippet[] = [
       "  end",
       "end",
     ],
-    desc: "Generates some functions.",
+  },
+  {
+    name: "while loop",
+    prefix: "whileloop",
+    desc: [
+      "Generates ```while``` loop statement.",
+      "```lua",
+      "while condition do",
+      "  Wait(0)",
+      "  ",
+      "end",
+      "```",
+    ],
+    body: ["while ${1:condition} do", "  Wait(0)", "  ${0:code}", "end"],
+  },
+  {
+    name: "repeat until loop",
+    prefix: "repeatloop",
+    desc: [
+      "Generates ```repeat until``` loop statement.",
+      "```lua",
+      "repeat",
+      "  Wait(0)",
+      "  ",
+      "until condition",
+      "```",
+    ],
+    body: ["repeat", "  Wait(0)", "  ${0:code}", "until ${1:condition}"],
   },
 ];
 
