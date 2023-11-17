@@ -236,3 +236,11 @@ export const isValidWord = (input: string): boolean => {
   const regex = /^[a-zA-Z0-9_]+$/;
   return regex.test(input);
 };
+
+//-------------------------------------------------------------------------------------------------
+
+/* export const registerCommand = (
+  command: string,
+  globalStateKeyName: string,
+  value: any
+) => {}; */
