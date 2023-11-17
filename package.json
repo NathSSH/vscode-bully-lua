@@ -17,7 +17,7 @@
   "categories": [
     "Programming Languages"
   ],
-  "icon": "/media/icon.png",
+  "icon": "/media/icon-with-lua.png",
   "galleryBanner": {
     "color": "#142F55",
     "theme": "dark"
@@ -29,7 +29,12 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": []
+    "commands": [
+      {
+        "title": "Bully Lua: Toggle code snippet",
+        "command": "bully-lua.toggleSnippet"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
