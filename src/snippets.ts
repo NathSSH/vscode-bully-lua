@@ -10,7 +10,7 @@ export const SNIPPETS: TSnippet[] = [
     name: "main function",
     prefix: "main",
     desc: [
-      "Declare a main function template.",
+      "Generates a main function template.",
       "```lua",
       "function main()",
       "  while not SystemIsReady() do",
@@ -161,7 +161,7 @@ export const SNIPPETS: TSnippet[] = [
     name: "while loop",
     prefix: "whileloop",
     desc: [
-      "Generates ```while``` loop statement.",
+      "Generates a ```while``` loop statement.",
       "```lua",
       "while condition do",
       "  Wait(0)",
@@ -175,7 +175,7 @@ export const SNIPPETS: TSnippet[] = [
     name: "repeat until loop",
     prefix: "repeatloop",
     desc: [
-      "Generates ```repeat until``` loop statement.",
+      "Generates a ```repeat until``` loop statement.",
       "```lua",
       "repeat",
       "  Wait(0)",

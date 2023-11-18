@@ -14,6 +14,7 @@ import {
 import { TBullyFunction } from "../types/function";
 import { TVariable } from "../types/variable";
 import SNIPPETS, { TSnippet } from "../snippets";
+import { STATES } from "../states";
 
 const createVariableCompletionItem = (name: string): vscode.CompletionItem => {
   const variableObj = getBullyVariableObj(name) as TVariable;
@@ -117,12 +118,14 @@ const completionProvider = vscode.languages.registerCompletionItemProvider(
       }
 
       // Snippet
-      SNIPPETS.sort((a, b) =>
-        a.name < b.name ? -1 : a.name > b.name ? 1 : 0
-      ).forEach((snippet, index) => {
-        // Insert
-        suggestions.push(createSnippetCompletionItem(snippet));
-      });
+      if (STATES.SNIPPET.value === true) {
+        SNIPPETS.sort((a, b) =>
+          a.name < b.name ? -1 : a.name > b.name ? 1 : 0
+        ).forEach((snippet, index) => {
+          // Insert
+          suggestions.push(createSnippetCompletionItem(snippet));
+        });
+      }
 
       // Default suggestion
       // Suggest all words that exist in the current file

@@ -7,6 +7,9 @@
     "name": "ranggabs"
   },
   "publisher": "ranggabs",
+  "repository": {
+    "url": "https://github.com/RanggaBS/vscode-bully-lua.git"
+  },
   "engines": {
     "vscode": "^1.84.0"
   },
