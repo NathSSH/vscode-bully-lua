@@ -19,7 +19,7 @@ const signatureHelp = vscode.languages.registerSignatureHelpProvider(
       const line = document.lineAt(position.line).text;
       const currentCharacter = position.character;
 
-      // Menemukan posisi tanda kurung buka terdekat sebelum karakter saat ini
+      // Finds the position of the nearest open parenthesis before the current character
       const openParenthesisIndex = line.lastIndexOf("(", currentCharacter);
 
       if (
@@ -42,7 +42,7 @@ const signatureHelp = vscode.languages.registerSignatureHelpProvider(
 
         if (writtenFunction && writtenFunction[0]) {
           const functionObj = BULLY_FUNCTIONS.find(
-            (func) => func.name === writtenFunction[0]
+            func => func.name === writtenFunction[0]
           );
 
           if (functionObj) {
@@ -79,6 +79,8 @@ const signatureHelp = vscode.languages.registerSignatureHelpProvider(
       }
     },
   },
+
+  // Trigger characters
   "(",
   ","
 );

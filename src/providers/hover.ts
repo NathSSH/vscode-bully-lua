@@ -17,10 +17,10 @@ const hoverProvider = vscode.languages.registerHoverProvider(
   {
     provideHover: (document, position, token): vscode.Hover | undefined => {
       const wordRange = document.getWordRangeAtPosition(position);
-      // Ngecek apakah sedang nge-hover kata atau ngga
+
+      // Check whether you hovered over a word or not
       if (!wordRange) {
-        // console.log("Anda sedang tidak meng-hover kata.");
-        return;
+        return undefined;
       }
 
       const writtenText = document.getText(wordRange);
@@ -57,7 +57,7 @@ const hoverProvider = vscode.languages.registerHoverProvider(
         }
       }
 
-      return;
+      return undefined;
     },
   }
 );

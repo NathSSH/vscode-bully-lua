@@ -1,39 +1,20 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import hoverProvider from "./providers/hover";
-import completionProvider from "./providers/completion";
+import completionProvider, {
+  globalVariableProvider,
+} from "./providers/completion";
 import signatureHelp from "./providers/signatureHelp";
 import { STATES, TState } from "./states";
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export const activate = (context: vscode.ExtensionContext) => {
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
-  // This line of code will only be executed once when your extension is activated
-  console.log('Ekstensi "bully-lua" sekarang aktif!');
-
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with registerCommand
-  // The commandId parameter must match the command field in package.json
-  /* let disposable = vscode.commands.registerCommand(
-		"bully-lua.helloWorld",
-		() => {
-			// The code you place here will be executed every time your command is executed
-			// Display a message box to the user
-			vscode.window.showInformationMessage(
-				"Ekstensi BullyLua telah aktif!"
-			);
-		}
-	); */
-
-  // context.subscriptions.push(disposable);
+  console.log('"bully-lua" extension is now active.');
 
   // Hover
   context.subscriptions.push(hoverProvider);
 
   // Completion
   context.subscriptions.push(completionProvider);
+  context.subscriptions.push(globalVariableProvider);
 
   // Parameter hint
   context.subscriptions.push(signatureHelp);
@@ -56,7 +37,6 @@ export const activate = (context: vscode.ExtensionContext) => {
   });
 };
 
-// This method is called when your extension is deactivated
 export const deactivate = () => {
-  console.log("Ekstensi telah di-deactivated.");
+  console.log('"bully-lua" extension has been deactivated.');
 };

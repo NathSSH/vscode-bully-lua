@@ -1,20 +1,26 @@
 # Bully Lua Intellisense
 
-Bully Lua variables & functions intellisense.
+Provide auto completion & signatures help for Bully Natives functions & variables in Lua.
 
 ## Features
 
 ### Code completion
 
-<img src="./media/feature-code-completion.gif" width="768" />
+<!-- <img src="./media/feature-code-completion.gif" width="768" /> -->
+
+![Code completion](./media/feature-code-completion.gif)
 
 ### Hover support
 
-<img src="./media/feature-hover-support.gif" width="768" />
+<!-- <img src="./media/feature-hover-support.gif" width="768" /> -->
+
+![Hover support](./media/feature-hover-support.gif)
 
 ### Code snippets
 
-<img src="./media/feature-code-snippets.gif" width="768" />
+<!-- <img src="./media/feature-code-snippets.gif" width="768" /> -->
+
+![Code snippets](./media/feature-code-snippets.gif)
 
 For example if there is an image subfolder under your extension project workspace:
 
@@ -36,11 +42,15 @@ Currently only 1 command is available.
 
 Default (code snippet disabled)
 
-<img src="./media/issue-showing-all-words.gif" width="768" />
+<!-- <img src="./media/issue-showing-all-words.gif" width="768" /> -->
+
+![Issue - suggesting all words](./media/issue-showing-all-words.gif)
 
 Code snippet enabled
 
-<img src="./media/issue-showing-only-snippets.gif" width="768" />
+<!-- <img src="./media/issue-showing-only-snippets.gif" width="768" /> -->
+
+![Issue - showing only snippets](./media/issue-showing-only-snippets.gif)
 
 ## Release Notes
 

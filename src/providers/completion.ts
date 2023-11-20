@@ -24,6 +24,9 @@ const createVariableCompletionItem = (name: string): vscode.CompletionItem => {
     vscode.CompletionItemKind.Value
   );
 
+  // Force on top
+  item.sortText = "_";
+
   item.detail = "variable";
 
   const varCode = createVariableCode(variableObj.name, variableObj.value);
@@ -41,6 +44,8 @@ const createFunctionCompletionItem = (name: string): vscode.CompletionItem => {
     functionObj.name,
     vscode.CompletionItemKind.Function
   );
+
+  item.sortText = "b";
 
   item.detail = "function";
 
@@ -71,6 +76,8 @@ const createSnippetCompletionItem = ({
     vscode.CompletionItemKind.Snippet
   );
 
+  item.sortText = "c";
+
   item.detail = name;
 
   item.insertText = new vscode.SnippetString(
@@ -84,6 +91,39 @@ const createSnippetCompletionItem = ({
   return item;
 };
 
+const getAllVariableCompletion = (): vscode.CompletionItem[] => {
+  const suggestions: vscode.CompletionItem[] = [];
+
+  BULLY_VARIABLES.forEach(variable => {
+    suggestions.push(createVariableCompletionItem(variable.name));
+  });
+
+  return suggestions;
+};
+
+const getAllFunctionCompletion = (): vscode.CompletionItem[] => {
+  const suggestions: vscode.CompletionItem[] = [];
+
+  BULLY_FUNCTIONS.forEach(func => {
+    suggestions.push(createFunctionCompletionItem(func.name));
+  });
+
+  return suggestions;
+};
+
+const getAllSnippetCompletion = (): vscode.CompletionItem[] => {
+  const suggestions: vscode.CompletionItem[] = [];
+
+  SNIPPETS.sort((a, b) =>
+    a.name < b.name ? -1 : a.name > b.name ? 1 : 0
+  ).forEach((snippet, index) => {
+    // Insert
+    suggestions.push(createSnippetCompletionItem(snippet));
+  });
+
+  return suggestions;
+};
+
 const completionProvider = vscode.languages.registerCompletionItemProvider(
   BULLY_SCRIPTING_LANGUAGE,
   {
@@ -95,6 +135,7 @@ const completionProvider = vscode.languages.registerCompletionItemProvider(
     ): vscode.CompletionItem[] | undefined => {
       const wordRange = document.getWordRangeAtPosition(position);
       const suggestions: vscode.CompletionItem[] = [];
+      let alreadyShowingSnippets = false;
 
       // If the cursor position is inside a text
       if (wordRange) {
@@ -115,94 +156,57 @@ const completionProvider = vscode.languages.registerCompletionItemProvider(
 
         pushMatchingItems(BULLY_VARIABLES, createVariableCompletionItem);
         pushMatchingItems(BULLY_FUNCTIONS, createFunctionCompletionItem);
+      } else {
+        suggestions.push(...getAllVariableCompletion());
+        suggestions.push(...getAllFunctionCompletion());
+        suggestions.push(...getAllSnippetCompletion());
+
+        alreadyShowingSnippets = true;
       }
 
       // Snippet
-      if (STATES.SNIPPET.value === true) {
-        SNIPPETS.sort((a, b) =>
-          a.name < b.name ? -1 : a.name > b.name ? 1 : 0
-        ).forEach((snippet, index) => {
-          // Insert
-          suggestions.push(createSnippetCompletionItem(snippet));
-        });
+      if (!alreadyShowingSnippets && STATES.SNIPPET.value === true) {
+        suggestions.push(...getAllSnippetCompletion());
       }
-
-      // Default suggestion
-      // Suggest all words that exist in the current file
-      // let allWords: vscode.CompletionItem[] = [];
-
-      // const getAllWords = async () => {
-      //   // Get all words in the current file, including language reserved word
-      //   const defaultSuggestionsPromise =
-      //     await vscode.commands.executeCommand<vscode.CompletionList>(
-      //       "vscode.executeCompletionItemProvider",
-      //       document.uri,
-      //       position
-      //     );
-
-      //   /* defaultSuggestionsPromise.then(
-      //     (completionList: vscode.CompletionList) => {
-      //       console.log("completionList.items = ", completionList.items);
-      //     }
-      //   ); */
-
-      //   return defaultSuggestionsPromise.items;
-      // };
-
-      /* const allWords = await getAllWords();
-
-      allWords.forEach(item => {
-        suggestions.push(item);
-      }); */
-
-      // Attempt 2
-      /* console.log("sebelum------");
-      vscode.commands
-        .executeCommand<vscode.CompletionList>(
-          "vscode.executeCompletionItemProvider",
-          document.uri,
-          position
-        )
-        .then((completionList: any) => {
-          console.log("iterate..");
-          completionList.items.forEach((item: vscode.CompletionItem) => {
-            suggestions.push(item);
-
-            console.log("-------------");
-            console.log("item = ", item);
-            console.log("___________\n\n");
-          });
-        }); */
-      // console.log("sebelum..");
-      /* const allWords = await vscode.commands.executeCommand<
-        Promise<vscode.CompletionList>
-      >("vscode.executeCompletionItemProvider", document.uri, position); */
-      // console.log("sesudah..");
-
-      /* allWords.items.forEach(item => {
-        suggestions.push(item);
-
-        console.log("item = ", item);
-      }); */
-
-      // Attempt 3
-      /* const editor = vscode.window.activeTextEditor;
-
-      if (editor) {
-        const text = editor.document.getText();
-
-        const words = removeDuplicates(text.split(/\s+/));
-
-        words.forEach(word => {
-          suggestions.push(
-            new vscode.CompletionItem(word, vscode.CompletionItemKind.Text)
-          );
-        });
-      } */
 
       return suggestions;
     },
   }
 );
+
+export const globalVariableProvider =
+  vscode.languages.registerCompletionItemProvider(
+    BULLY_SCRIPTING_LANGUAGE,
+    {
+      provideCompletionItems: (
+        document,
+        position,
+        token,
+        context
+      ): vscode.CompletionItem[] | undefined => {
+        const suggestions: vscode.CompletionItem[] = [];
+
+        const lineText = document.lineAt(position.line).text;
+
+        // Jika kursor berada pada "_G."
+        if (
+          lineText.includes("_G.") &&
+          lineText.indexOf("_G.") < position.character
+        ) {
+          suggestions.push(...getAllVariableCompletion());
+
+          suggestions.push(...getAllFunctionCompletion());
+
+          suggestions.push(...getAllSnippetCompletion());
+
+          return suggestions;
+        }
+
+        return undefined;
+      },
+    },
+    ".",
+    "_G"
+  );
 
 export default completionProvider;

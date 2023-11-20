@@ -1,13 +1,14 @@
 {
   "name": "bully-lua",
-  "displayName": "Bully Lua",
+  "displayName": "Bully Lua Intellisense",
   "description": "Bully Lua function & variables intellisense.",
   "version": "1.0.0",
   "author": {
-    "name": "ranggabs"
+    "name": "Rangga BS"
   },
   "publisher": "ranggabs",
   "repository": {
+    "type": "git",
     "url": "https://github.com/RanggaBS/vscode-bully-lua.git"
   },
   "engines": {
