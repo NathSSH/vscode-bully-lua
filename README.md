@@ -22,8 +22,6 @@ Provide auto completion & signatures help for Bully Natives functions & variable
 
 ![Code snippets](./media/feature-code-snippets.gif)
 
-For example if there is an image subfolder under your extension project workspace:
-
 ## Requirements
 
 - VS Code v1.84.0 or later
