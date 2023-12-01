@@ -1,4 +1,10 @@
-# Bully Lua Intellisense
+<h1 align="center">
+
+  ![icon](./media/icon-with-lua.png)
+  
+  Bully Lua Intellisense
+  
+</h1>
 
 Provide auto completion & signatures help for Bully Natives functions & variables in Lua.
 
